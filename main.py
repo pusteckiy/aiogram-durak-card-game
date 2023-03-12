@@ -1,15 +1,20 @@
 from aiogram import executor, types, exceptions
 
 from src.game import Durak
-from bot import get_bot, on_startup
+from src.bot import get_bot, on_startup
 
 active_games = dict()
 connected_players = list()
 dp = get_bot()
 
 
+@dp.message_handler(commands=['test'], state='*')
+async def test(message):
+    await message.answer('ok')
+
+
 @dp.message_handler(commands=['start', 'help'], state='*')
-async def send_welcome(message: types.Message):
+async def only_group_chat(message: types.Message):
     await message.reply("🤌 Бот працює тільки в груповому чаті.")
 
 
@@ -74,5 +79,4 @@ async def start_game(message: types.Message):
 
 
 if __name__ == '__main__':
-    dp = get_bot()
     executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
